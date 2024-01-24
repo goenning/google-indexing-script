@@ -39,3 +39,9 @@ Here's an example of what you should expect:
 ## 📄 License
 
 MIT License
+
+## 💖 Sponsor
+
+This project is sponsored by [SEO Gets](https://seogets.com)
+
+![](https://seogets.com/og.png)
