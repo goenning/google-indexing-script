@@ -2,7 +2,9 @@ import Sitemapper from "sitemapper";
 import { fetchRetry } from "./utils.mjs";
 
 async function getSitemapsList(accessToken, siteUrl) {
-  const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/sitemaps`;
+  const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(
+    siteUrl
+  )}/sitemaps`;
 
   const response = await fetchRetry(url, {
     headers: {
@@ -30,14 +32,14 @@ async function getSitemapsList(accessToken, siteUrl) {
 export async function getSitemapPages(accessToken, siteUrl) {
   const sitemaps = await getSitemapsList(accessToken, siteUrl);
 
-  const pages = [];
+  let pages = [];
   for (const url of sitemaps) {
     const Google = new Sitemapper({
       url,
     });
 
     const { sites } = await Google.fetch();
-    pages.push(...sites);
+    pages = [...pages, ...sites];
   }
 
   return [sitemaps, [...new Set(pages)]];
