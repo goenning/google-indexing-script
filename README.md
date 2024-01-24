@@ -15,7 +15,7 @@ You can read more about the motivation behind it and how it works on this blog p
 
 ## Preparation
 
-1. Download or close this repository
+1. Download or clone this repository
 2. Follow this [guide](https://developers.google.com/search/apis/indexing-api/v3/prereqs) from Google. By the end of it, you should have a project on Google Cloud with the Indexing API enabled, a service account with the `Owner` permission on your sites.
 3. Download the JSON file with the credentials of the service account and save it in the same folder as the script. The file should be named `service_account.json`
 
@@ -23,7 +23,7 @@ You can read more about the motivation behind it and how it works on this blog p
 
 1. Open a terminal and navigate to the folder where you cloned repository
 2. Run `npm install` to install the dependencies
-3. Run `node run index <domain>` to index all the pages of your site. Replace `<domain>` with your site domain. For example, if your site is `https://seogets.com`, you should run `node run index seogets.com`
+3. Run `npm run index <domain>` to index all the pages of your site. Replace `<domain>` with your site domain. For example, if your site is `https://seogets.com`, you should run `node run index seogets.com`
 
 Here's an example of what you should expect:
 
