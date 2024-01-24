@@ -93,11 +93,11 @@ console.log(``);
 
 for (const url of indexablePages) {
   console.log(`📄 Processing url: ${url}`);
-  const metadata = await getPublishMetadata(accessToken, url);
-  if (metadata === 404) {
+  const status = await getPublishMetadata(accessToken, url);
+  if (status === 404) {
     await requestIndexing(accessToken, url);
     console.log("🚀 Indexing requested successfully. It may take a few days for Google to process it.");
-  } else {
+  } else if (status < 400) {
     console.log(`🕛 Indexing already requested previously. It may take a few days for Google to process it.`);
   }
   console.log(``);

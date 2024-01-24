@@ -23,6 +23,7 @@ export async function getPageIndexingStatus(accessToken, siteUrl, inspectionUrl)
 
     if (response.status === 403) {
       console.error(`🔐 This service account doesn't have access to this site.`);
+      console.error(await response.text());
       return "Forbidden";
     }
 
@@ -75,6 +76,7 @@ export async function getPublishMetadata(accessToken, url) {
   if (response.status === 403) {
     console.error(`🔐 This service account doesn't have access to this site.`);
     console.error(`Response was: ${response.status}`);
+    console.error(await response.text());
   }
 
   if (response.status >= 500) {
