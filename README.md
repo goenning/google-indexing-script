@@ -5,7 +5,8 @@ Use this script to get your entire site indexed on Google in less than 48 hours.
 You can read more about the motivation behind it and how it works on this blog post https://seogets.com/blog/google-indexing-script
 
 > [!IMPORTANT]  
-> This script uses [Google Indexing API](https://developers.google.com/search/apis/indexing-api/v3/quickstart). While there is no absolute guarantee that every page will be indexed, recent tests conducted in December 2023 have shown a notably high success rate.
+> 1. Indexing != Ranking. This will not help your content/page rank on Google, it'll just let Google know about the existence of your page.
+> 2. This script uses [Google Indexing API](https://developers.google.com/search/apis/indexing-api/v3/quickstart). While there is no absolute guarantee that every page will be indexed, recent tests conducted in December 2023 have shown a notably high success rate.
 
 ## Requirements
 
