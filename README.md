@@ -2,7 +2,7 @@
 
 Use this script to get your entire site indexed on Google in less than 48 hours. No tricks, no hacks, just a simple script and a Google API.
 
-You can read more about the motivation behind it and how it works on this blog post https://seogets.com/blog/google-indexing-script
+You can read more about the motivation behind it and how it works in this blog post https://seogets.com/blog/google-indexing-script
 
 > [!IMPORTANT]  
 > 1. Indexing != Ranking. This will not help your content/page rank on Google, it'll just let Google know about the existence of all your pages.
@@ -23,11 +23,12 @@ You can read more about the motivation behind it and how it works on this blog p
 
 ## Usage
 
-1. Open a terminal and navigate to the folder where you cloned repository
-2. Run `npm install` to install the dependencies
-3. Run `npm run index <domain or url>` to index all the pages of your site.
+1. Open a terminal and navigate to the folder where you cloned the repository
+2. Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v` and use [nvm](https://nvm.sh) for managing multiple node versions.
+3. Run `npm install` to install the dependencies
+4. Run `npm run index <domain or url>` to index all the pages of your site.
 - If your site is a `Domain` Property on GSC, then run it like `npm run index seogets.com`
-- Otherwise if it's a `URL Prefix` property, then run it like `npm run index https://seogets.com`
+- Otherwise, if it's a `URL Prefix` property, then run it like `npm run index https://seogets.com`
 - When in doubt try both 😀
 
 Here's an example of what you should expect:
