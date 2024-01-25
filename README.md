@@ -19,13 +19,16 @@ You can read more about the motivation behind it and how it works on this blog p
 1. Download or clone this repository
 2. Follow this [guide](https://developers.google.com/search/apis/indexing-api/v3/prereqs) from Google. By the end of it, you should have a project on Google Cloud with the Indexing API enabled, a service account with the `Owner` permission on your sites.
 3. Make sure you enable both `Google Search Console API` and `Web Search Indexing API` on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
-4. Download the JSON file with the credentials of the service account and save it in the same folder as the script. The file should be named `service_account.json`
+4. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
 
 ## Usage
 
 1. Open a terminal and navigate to the folder where you cloned repository
 2. Run `npm install` to install the dependencies
-3. Run `npm run index <domain>` to index all the pages of your site. Replace `<domain>` with your site domain. For example, if your site is `https://seogets.com`, you should run `node run index seogets.com`
+3. Run `npm run index <domain or url>` to index all the pages of your site.
+- If your site is a `Domain` Property on GSC, then run it like `npm run index seogets.com`
+- Otherwise if it's a `URL Prefix` property, then run it like `npm run index https://seogets.com`
+- When in doubt try both 😀
 
 Here's an example of what you should expect:
 
