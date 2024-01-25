@@ -24,7 +24,7 @@ You can read more about the motivation behind it and how it works in this blog p
 ## Usage
 
 1. Open a terminal and navigate to the folder where you cloned the repository
-2. Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v` and use [nvm](https://nvm.sh) for managing multiple node versions.
+2. Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v`.
 3. Run `npm install` to install the dependencies
 4. Run `npm run index <domain or url>` to index all the pages of your site.
 - If your site is a `Domain` Property on GSC, then run it like `npm run index seogets.com`
