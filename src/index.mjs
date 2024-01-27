@@ -21,7 +21,7 @@ if (!input) {
 
 const accessToken = async()=>{
   try{
-    await getAccessToken();
+    return await getAccessToken();
   }
   catch(error){
     console.log("Error obtaining access token:", error)
