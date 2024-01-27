@@ -19,7 +19,16 @@ if (!input) {
   process.exit(1);
 }
 
-const accessToken = await getAccessToken();
+const accessToken = async()=>{
+  try{
+    await getAccessToken();
+  }
+  catch(error){
+    console.log("Error obtaining access token:", error)
+  }
+
+}
+
 const siteUrl = convertToSiteUrl(input);
 console.log(`🔎 Processing site: ${siteUrl}`);
 const cachePath = `.cache/${siteUrl.replace("http://", "http_").replace("https://", "https_").replace("/", "_")}.json`;
