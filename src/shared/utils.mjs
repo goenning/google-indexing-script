@@ -9,7 +9,7 @@ export async function batch(task, items, batchSize, onBatchComplete) {
   }
 }
 
-export async function fetchRetry(url, options, retries = 3) {
+export async function fetchRetry(url, options, retries = 5) {
   try {
     const response = await fetch(url, options);
     if (response.status >= 500) {
