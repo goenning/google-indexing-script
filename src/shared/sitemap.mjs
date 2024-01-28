@@ -26,6 +26,11 @@ async function getSitemapsList(accessToken, siteUrl) {
   }
 
   const body = await response.json();
+  console.log("API Response Body:", body);
+  if (!body.sitemap || !Array.isArray(body.sitemap)) {
+    console.error("❌ No valid sitemap array found in the response.");
+    return [];
+  }
   return body.sitemap.map((x) => x.path);
 }
 
