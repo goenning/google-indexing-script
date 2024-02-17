@@ -22,7 +22,7 @@ export async function getPageIndexingStatus(accessToken, siteUrl, inspectionUrl)
     });
 
     if (response.status === 403) {
-      console.error(`🔐 This service account doesn't have access to this site.`);
+      console.error(`🔐 403 This service account doesn't have access to this site.`);
       console.error(await response.text());
       return "Forbidden";
     }
