@@ -43,6 +43,7 @@ const indexableStatuses = [
   "URL is unknown to Google",
   "Forbidden",
   "Error",
+  "Not found (404)"
 ];
 
 const shouldRecheck = (status, lastCheckedAt) => {
