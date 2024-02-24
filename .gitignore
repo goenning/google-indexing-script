@@ -2,3 +2,4 @@ service_account.json
 .cache
 node_modules
 .vscode
+dist
