@@ -58,7 +58,7 @@ const main = async () => {
     "Error",
   ];
 
-  const shouldRecheck = (status, lastCheckedAt) => {
+  const shouldRecheck = (status: string, lastCheckedAt: string) => {
     const shouldIndexIt = indexableStatuses.includes(status);
     const isOld = new Date(lastCheckedAt) < new Date(Date.now() - CACHE_TIMEOUT);
     return shouldIndexIt || isOld;
