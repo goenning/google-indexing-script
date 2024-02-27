@@ -11,10 +11,10 @@ export async function getAccessToken() {
   const key = JSON.parse(readFileSync("./service_account.json", "utf8"));
   const jwtClient = new google.auth.JWT(
     key.client_email,
-    null,
+    undefined,
     key.private_key,
     ["https://www.googleapis.com/auth/webmasters.readonly", "https://www.googleapis.com/auth/indexing"],
-    null
+    undefined
   );
 
   const tokens = await jwtClient.authorize();

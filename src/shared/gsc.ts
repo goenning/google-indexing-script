@@ -1,13 +1,17 @@
-import { fetchRetry } from "./utils.mjs";
+import { fetchRetry } from "./utils";
 
-export function convertToSiteUrl(input) {
+export function convertToSiteUrl(input: string) {
   if (input.startsWith("http://") || input.startsWith("https://")) {
     return input.endsWith("/") ? input : `${input}/`;
   }
   return `sc-domain:${input}`;
 }
 
-export async function getPageIndexingStatus(accessToken, siteUrl, inspectionUrl) {
+export async function getPageIndexingStatus(
+  accessToken: string,
+  siteUrl: string,
+  inspectionUrl: string
+): Promise<string> {
   try {
     const response = await fetchRetry(`https://searchconsole.googleapis.com/v1/urlInspection/index:inspect`, {
       method: "POST",

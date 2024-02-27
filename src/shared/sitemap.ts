@@ -1,10 +1,9 @@
 import Sitemapper from "sitemapper";
-import { fetchRetry } from "./utils.mjs";
+import { fetchRetry } from "./utils";
+import { webmasters_v3 } from "googleapis";
 
-async function getSitemapsList(accessToken, siteUrl) {
-  const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(
-    siteUrl
-  )}/sitemaps`;
+async function getSitemapsList(accessToken: string, siteUrl: string) {
+  const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/sitemaps`;
 
   const response = await fetchRetry(url, {
     headers: {
@@ -25,14 +24,20 @@ async function getSitemapsList(accessToken, siteUrl) {
     return [];
   }
 
-  const body = await response.json();
-  return body.sitemap.map((x) => x.path);
+  const body: webmasters_v3.Schema$SitemapsListResponse = await response.json();
+
+  if (!body.sitemap) {
+    console.error("❌ No sitemaps found, add them to Google Search Console and try again.");
+    return [];
+  }
+
+  return body.sitemap.filter((x) => x.path !== undefined && x.path !== null).map((x) => x.path as string);
 }
 
-export async function getSitemapPages(accessToken, siteUrl) {
+export async function getSitemapPages(accessToken: string, siteUrl: string) {
   const sitemaps = await getSitemapsList(accessToken, siteUrl);
 
-  let pages = [];
+  let pages: string[] = [];
   for (const url of sitemaps) {
     const Google = new Sitemapper({
       url,

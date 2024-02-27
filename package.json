@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "index": "node ./src/index.mjs"
+    "index": "ts-node ./src/index.ts"
   },
   "dependencies": {
     "googleapis": "131.0.0",
@@ -11,5 +11,9 @@
   },
   "prettier": {
     "printWidth": 120
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }
