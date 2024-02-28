@@ -32,10 +32,20 @@ export async function getPageIndexingStatus(
     }
 
     if (response.status >= 300) {
-      console.error(`❌ Failed to get indexing status.`);
-      console.error(`Response was: ${response.status}`);
-      console.error(await response.text());
-      return "Error";
+      if (response.status === 429) {
+        console.error("🚦 Rate limit exceeded, try again later.");
+        console.error("")
+        console.error("   Quota: https://developers.google.com/webmaster-tools/limits#url-inspection");
+        console.error("   Usage: https://console.cloud.google.com/apis/enabled");
+        console.error("")
+        process.exit(1);
+      } else {
+        console.error(`❌ Failed to get indexing status.`);
+        console.error(`Response was: ${response.status}`);
+        console.error(await response.text());
+
+        return "Error";
+      }
     }
 
     const body = await response.json();
@@ -83,6 +93,15 @@ export async function getPublishMetadata(accessToken, url) {
     console.error(await response.text());
   }
 
+  if (response.status === 429) {
+    console.error("🚦 Rate limit exceeded, try again later.");
+    console.error("")
+    console.error("   Quota: https://developers.google.com/search/apis/indexing-api/v3/quota-pricing#quota");
+    console.error("   Usage: https://console.cloud.google.com/apis/enabled");
+    console.error("")
+    process.exit(1);
+  }
+
   if (response.status >= 500) {
     console.error(`❌ Failed to get publish metadata.`);
     console.error(`Response was: ${response.status}`);
@@ -111,8 +130,18 @@ export async function requestIndexing(accessToken, url) {
   }
 
   if (response.status >= 300) {
-    console.error(`❌ Failed to request indexing.`);
-    console.error(`Response was: ${response.status}`);
-    console.error(await response.text());
+    
+    if (response.status === 429) {
+      console.error("🚦 Rate limit exceeded, try again later.");
+      console.error("")
+      console.error("   Quota: https://developers.google.com/search/apis/indexing-api/v3/quota-pricing#quota");
+      console.error("   Usage: https://console.cloud.google.com/apis/enabled");
+      console.error("")
+      process.exit(1);
+    } else {
+      console.error(`❌ Failed to request indexing.`);
+      console.error(`Response was: ${response.status}`);
+      console.error(await response.text());
+    }
   }
 }
