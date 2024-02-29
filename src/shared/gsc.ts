@@ -1,3 +1,4 @@
+import { Status } from "./types";
 import { fetchRetry } from "./utils";
 
 export function convertToSiteUrl(input: string) {
@@ -11,7 +12,7 @@ export async function getPageIndexingStatus(
   accessToken: string,
   siteUrl: string,
   inspectionUrl: string
-): Promise<string> {
+): Promise<Status> {
   try {
     const response = await fetchRetry(`https://searchconsole.googleapis.com/v1/urlInspection/index:inspect`, {
       method: "POST",
@@ -28,23 +29,19 @@ export async function getPageIndexingStatus(
     if (response.status === 403) {
       console.error(`🔐 This service account doesn't have access to this site.`);
       console.error(await response.text());
-      return "Forbidden";
+
+      return Status.Forbidden;
     }
 
     if (response.status >= 300) {
       if (response.status === 429) {
-        console.error("🚦 Rate limit exceeded, try again later.");
-        console.error("")
-        console.error("   Quota: https://developers.google.com/webmaster-tools/limits#url-inspection");
-        console.error("   Usage: https://console.cloud.google.com/apis/enabled");
-        console.error("")
-        process.exit(1);
+        return Status.RateLimited;
       } else {
         console.error(`❌ Failed to get indexing status.`);
         console.error(`Response was: ${response.status}`);
         console.error(await response.text());
 
-        return "Error";
+        return Status.Error;
       }
     }
 
@@ -57,25 +54,27 @@ export async function getPageIndexingStatus(
   }
 }
 
-export function getEmojiForStatus(status) {
+export function getEmojiForStatus(status: Status) {
   switch (status) {
-    case "Submitted and indexed":
+    case Status.SubmittedAndIndexed:
       return "✅";
-    case "Duplicate without user-selected canonical":
+    case Status.DuplicateWithoutUserSelectedCanonical:
       return "😵";
-    case "Crawled - currently not indexed":
-    case "Discovered - currently not indexed":
+    case Status.CrawledCurrentlyNotIndexed:
+    case Status.DiscoveredCurrentlyNotIndexed:
       return "👀";
-    case "Page with redirect":
+    case Status.PageWithRedirect:
       return "🔀";
-    case "URL is unknown to Google":
+    case Status.URLIsUnknownToGoogle:
       return "❓";
+    case Status.RateLimited:
+      return "🚦";
     default:
       return "❌";
   }
 }
 
-export async function getPublishMetadata(accessToken, url) {
+export async function getPublishMetadata(accessToken: string, url: string) {
   const response = await fetchRetry(
     `https://indexing.googleapis.com/v3/urlNotifications/metadata?url=${encodeURIComponent(url)}`,
     {
@@ -95,10 +94,10 @@ export async function getPublishMetadata(accessToken, url) {
 
   if (response.status === 429) {
     console.error("🚦 Rate limit exceeded, try again later.");
-    console.error("")
+    console.error("");
     console.error("   Quota: https://developers.google.com/search/apis/indexing-api/v3/quota-pricing#quota");
     console.error("   Usage: https://console.cloud.google.com/apis/enabled");
-    console.error("")
+    console.error("");
     process.exit(1);
   }
 
@@ -111,7 +110,7 @@ export async function getPublishMetadata(accessToken, url) {
   return response.status;
 }
 
-export async function requestIndexing(accessToken, url) {
+export async function requestIndexing(accessToken: string, url: string) {
   const response = await fetchRetry("https://indexing.googleapis.com/v3/urlNotifications:publish", {
     method: "POST",
     headers: {
@@ -130,13 +129,12 @@ export async function requestIndexing(accessToken, url) {
   }
 
   if (response.status >= 300) {
-    
     if (response.status === 429) {
       console.error("🚦 Rate limit exceeded, try again later.");
-      console.error("")
+      console.error("");
       console.error("   Quota: https://developers.google.com/search/apis/indexing-api/v3/quota-pricing#quota");
       console.error("   Usage: https://console.cloud.google.com/apis/enabled");
-      console.error("")
+      console.error("");
       process.exit(1);
     } else {
       console.error(`❌ Failed to request indexing.`);
