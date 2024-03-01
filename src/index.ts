@@ -7,6 +7,7 @@ import {
   getPageIndexingStatus,
 } from "./shared/gsc";
 import { getSitemapPages } from "./shared/sitemap";
+import { Status } from "./shared/types";
 import { batch } from "./shared/utils";
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
 
@@ -45,20 +46,31 @@ const main = async () => {
 
   console.log(`👉 Found ${pages.length} URLs in ${sitemaps.length} sitemap`);
 
-  const statusPerUrl: Record<string, { status: string; lastCheckedAt: string }> = existsSync(cachePath)
+  const statusPerUrl: Record<string, { status: Status; lastCheckedAt: string }> = existsSync(cachePath)
     ? JSON.parse(readFileSync(cachePath, "utf8"))
     : {};
-  const pagesPerStatus: Record<string, string[]> = {};
+  const pagesPerStatus: Record<Status, string[]> = {
+    [Status.SubmittedAndIndexed]: [],
+    [Status.DuplicateWithoutUserSelectedCanonical]: [],
+    [Status.CrawledCurrentlyNotIndexed]: [],
+    [Status.DiscoveredCurrentlyNotIndexed]: [],
+    [Status.PageWithRedirect]: [],
+    [Status.URLIsUnknownToGoogle]: [],
+    [Status.RateLimited]: [],
+    [Status.Forbidden]: [],
+    [Status.Error]: [],
+  };
 
   const indexableStatuses = [
-    "Discovered - currently not indexed",
-    "Crawled - currently not indexed",
-    "URL is unknown to Google",
-    "Forbidden",
-    "Error",
+    Status.DiscoveredCurrentlyNotIndexed,
+    Status.CrawledCurrentlyNotIndexed,
+    Status.URLIsUnknownToGoogle,
+    Status.Forbidden,
+    Status.Error,
+    Status.RateLimited,
   ];
 
-  const shouldRecheck = (status: string, lastCheckedAt: string) => {
+  const shouldRecheck = (status: Status, lastCheckedAt: string) => {
     const shouldIndexIt = indexableStatuses.includes(status);
     const isOld = new Date(lastCheckedAt) < new Date(Date.now() - CACHE_TIMEOUT);
     return shouldIndexIt || isOld;
@@ -87,13 +99,15 @@ const main = async () => {
   mkdirSync(".cache", { recursive: true });
   writeFileSync(cachePath, JSON.stringify(statusPerUrl, null, 2));
 
-  for (const [status, pages] of Object.entries(pagesPerStatus)) {
-    console.log(`• ${getEmojiForStatus(status)} ${status}: ${pages.length} pages`);
+  for (const status of Object.keys(pagesPerStatus)) {
+    const pages = pagesPerStatus[status as Status];
+    if (pages.length === 0) continue;
+    console.log(`• ${getEmojiForStatus(status as Status)} ${status}: ${pages.length} pages`);
   }
   console.log("");
 
   const indexablePages = Object.entries(pagesPerStatus).flatMap(([status, pages]) =>
-    indexableStatuses.includes(status) ? pages : []
+    indexableStatuses.includes(status as Status) ? pages : []
   );
 
   if (indexablePages.length === 0) {
