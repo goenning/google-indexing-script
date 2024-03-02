@@ -1,14 +1,21 @@
 import { google } from "googleapis";
-import { existsSync, readFileSync } from "fs";
+import fs from "fs";
+import path from "path";
+import os from "os";
 
 export async function getAccessToken() {
-  if (!existsSync("./service_account.json")) {
+  const filePath = "service_account.json";
+  const filePathFromHome = path.join(os.homedir(), ".gis", "service_account.json");
+  const isFile = fs.existsSync(filePath);
+  const isFileFromHome = fs.existsSync(filePathFromHome);
+
+  if (!isFile && !isFileFromHome) {
     console.error("❌ service_account.json not found, please follow the instructions in README.md");
     console.error("");
     process.exit(1);
   }
-
-  const key = JSON.parse(readFileSync("./service_account.json", "utf8"));
+  
+  const key = JSON.parse(fs.readFileSync(isFile ? filePath : filePathFromHome, "utf8"));
   const jwtClient = new google.auth.JWT(
     key.client_email,
     undefined,
