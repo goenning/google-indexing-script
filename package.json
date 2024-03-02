@@ -2,8 +2,26 @@
   "name": "google-indexing-script",
   "private": true,
   "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "google-indexing-script": "./dist/bin.js",
+    "gis": "./dist/bin.js"
+  },
+  "keywords": [
+    "google",
+    "indexing",
+    "search-console",
+    "sitemap",
+    "seo",
+    "google-search",
+    "cli",
+    "typescript"
+  ],
   "scripts": {
-    "index": "ts-node ./src/index.ts"
+    "index": "ts-node ./src/index.ts",
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "dependencies": {
     "googleapis": "131.0.0",
@@ -14,6 +32,7 @@
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
+    "tsup": "^8.0.2",
     "typescript": "^5.3.3"
   }
 }
