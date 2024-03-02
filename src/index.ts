@@ -5,17 +5,17 @@ import {
   requestIndexing,
   getEmojiForStatus,
   getPageIndexingStatus,
+  convertToFilePath,
 } from "./shared/gsc";
 import { getSitemapPages } from "./shared/sitemap";
 import { Status } from "./shared/types";
 import { batch } from "./shared/utils";
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
+import path from "path";
 
 const CACHE_TIMEOUT = 1000 * 60 * 60 * 24 * 14; // 14 days
 
-const main = async () => {
-  const input = process.argv[2];
-
+export const index = async (input: string = process.argv[2]) => {
   if (!input) {
     console.error("❌ Please provide a domain or site URL as the first argument.");
     console.error("");
@@ -25,10 +25,7 @@ const main = async () => {
   const accessToken = await getAccessToken();
   const siteUrl = convertToSiteUrl(input);
   console.log(`🔎 Processing site: ${siteUrl}`);
-  const cachePath = `.cache/${siteUrl
-    .replace("http://", "http_")
-    .replace("https://", "https_")
-    .replace("/", "_")}.json`;
+  const cachePath = path.join(".cache", `${convertToFilePath(siteUrl)}.json`);
 
   if (!accessToken) {
     console.error("❌ Failed to get access token, check your service account credentials.");
@@ -135,4 +132,4 @@ const main = async () => {
   console.log(``);
 };
 
-main();
+export * from "./shared";
