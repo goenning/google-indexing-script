@@ -16,10 +16,91 @@ You can read more about the motivation behind it and how it works in this blog p
 
 ## Preparation
 
-1. Download or clone this repository
-2. Follow this [guide](https://developers.google.com/search/apis/indexing-api/v3/prereqs) from Google. By the end of it, you should have a project on Google Cloud with the Indexing API enabled, a service account with the `Owner` permission on your sites.
-3. Make sure you enable both `Google Search Console API` and `Web Search Indexing API` on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
-4. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
+1. Follow this [guide](https://developers.google.com/search/apis/indexing-api/v3/prereqs) from Google. By the end of it, you should have a project on Google Cloud with the Indexing API enabled, a service account with the `Owner` permission on your sites.
+2. Make sure you enable both `Google Search Console API` and `Web Search Indexing API` on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
+3. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
+
+
+## Installation
+
+### Using CLI
+
+Install the cli globally on your machine.
+
+```bash
+npm i -g google-indexing-script
+```
+
+#### With `service_account.json` *(recommended)*
+
+Create a `.gis` directory in your home folder and move the `service_account.json` file there.
+
+```bash
+mkdir ~/.gis
+mv service_account.json ~/.gis
+```
+
+Run the script with the domain or url you want to index.
+
+```bash
+gis seogets.com
+# or (long version)
+google-indexing-script seogets.com
+```
+
+#### With environment variables
+
+Open `service_account.json` and copy the `client_email` and `private_key` values.
+
+Set the environment variables `GOOGLE_CLIENT_EMAIL` and `GOOGLE_PRIVATE_KEY` with the values you copied.
+
+```bash
+export GOOGLE_CLIENT_EMAIL="your-client-email"
+export GOOGLE_PRIVATE_KEY="your-private-key"
+```
+
+Run the script with the domain or url you want to index.
+
+```bash
+gis seogets.com
+```
+
+#### With arguments *(not recommended)*
+
+Open `service_account.json` and copy the `client_email` and `private_key` values.
+
+Once you have the values, run the script with the domain or url you want to index, the client email and the private key.
+
+```bash
+gis seogets.com your-client-email your-private-key
+```
+
+### Using the repository
+
+Clone the repository to your machine.
+
+```bash
+git clone https://github.com/goenning/google-indexing-script.git
+cd google-indexing-script
+```
+
+Copy the `service_account.json` file to the repository folder.
+
+```bash
+mv /path/to/service_account.json .
+```
+
+Install the dependencies.
+
+```bash
+npm install
+```
+
+Run the script with the domain or url you want to index.
+
+```bash
+npm run index seogets.com
+```
 
 ## Usage
 
