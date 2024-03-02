@@ -15,14 +15,25 @@ import path from "path";
 
 const CACHE_TIMEOUT = 1000 * 60 * 60 * 24 * 14; // 14 days
 
-export const index = async (input: string = process.argv[2]) => {
+export type IndexOptions = {
+  client_email?: string;
+  private_key?: string;
+};
+
+export const index = async (
+  input: string = process.argv[2],
+  options: IndexOptions = {
+    client_email: process.argv[3] || process.env.GIS_CLIENT_EMAIL,
+    private_key: process.argv[4] || process.env.GIS_PRIVATE_KEY,
+  }
+) => {
   if (!input) {
     console.error("❌ Please provide a domain or site URL as the first argument.");
     console.error("");
     process.exit(1);
   }
 
-  const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken(options.client_email, options.private_key);
   const siteUrl = convertToSiteUrl(input);
   console.log(`🔎 Processing site: ${siteUrl}`);
   const cachePath = path.join(".cache", `${convertToFilePath(siteUrl)}.json`);
