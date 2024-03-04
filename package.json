@@ -19,7 +19,7 @@
     "typescript"
   ],
   "scripts": {
-    "index": "ts-node ./src/index.ts",
+    "index": "ts-node ./src/cli.ts",
     "build": "tsup",
     "dev": "tsup --watch"
   },
