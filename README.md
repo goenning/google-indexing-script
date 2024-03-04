@@ -77,7 +77,7 @@ When in doubt try both 😀
 
 Here are some other ways to run the script:
 
-```
+```bash
 # custom path to service_account.json
 gis seogets.com --path /path/to/service_account.json
 # long version command
