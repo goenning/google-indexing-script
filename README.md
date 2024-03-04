@@ -107,7 +107,7 @@ Open `service_account.json` and copy the `client_email` and `private_key` values
 Once you have the values, run the script with the domain or url you want to index, the client email and the private key.
 
 ```bash
-gis seogets.com your-client-email your-private-key
+gis seogets.com --client-email your-client-email --private-key your-private-key
 ```
 </details>
 
