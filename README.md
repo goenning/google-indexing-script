@@ -48,11 +48,10 @@ npm run build
 npm i -g .
 ```
 
-
-## Usage
-
 > [!NOTE]
 > Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v`.
+
+## Usage
 
 <details open>
 <summary>With <code>service_account.json</code> <i>(recommended)</i></summary>
@@ -73,6 +72,7 @@ gis seogets.com
 # `url prefix` property on gsc
 gis https://seogets.com
 ```
+
 > [!TIP]
 > When in doubt try both 😀
 
