@@ -73,8 +73,7 @@ gis seogets.com
 gis https://seogets.com
 ```
 
-> [!TIP]
-> When in doubt try both 😀
+When in doubt try both 😀
 
 Here are some other ways to run the script:
 
@@ -116,11 +115,10 @@ Here's an example of what you should expect:
 
 ![](./output.png)
 
-**Important Notes:**
-
-- Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
-- You can run the script as many times as you want. It will only index the pages that are not already indexed.
-- Sites with a large number of pages might take a while to index, be patient.
+> [!IMPORTANT]
+> - Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
+> - You can run the script as many times as you want. It will only index the pages that are not already indexed.
+> - Sites with a large number of pages might take a while to index, be patient.
 
 ## 📄 License
 
