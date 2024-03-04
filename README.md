@@ -31,7 +31,31 @@ Install the cli globally on your machine.
 npm i -g google-indexing-script
 ```
 
-#### With `service_account.json` *(recommended)*
+### Using the repository
+
+Clone the repository to your machine.
+
+```bash
+git clone https://github.com/goenning/google-indexing-script.git
+cd google-indexing-script
+```
+
+Install and build the project.
+
+```bash
+npm install
+npm run build
+npm i -g .
+```
+
+
+## Usage
+
+> [!NOTE]
+> Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v`.
+
+<details open>
+<summary>With <code>service_account.json</code> <i>(recommended)</i></summary>
 
 Create a `.gis` directory in your home folder and move the `service_account.json` file there.
 
@@ -43,29 +67,41 @@ mv service_account.json ~/.gis
 Run the script with the domain or url you want to index.
 
 ```bash
+gis <domain or url>
+# `domain` property on gsc
 gis seogets.com
-# or (long version)
-google-indexing-script seogets.com
+# `url prefix` property on gsc
+gis https://seogets.com
 ```
+> [!TIP]
+> When in doubt try both 😀
 
-#### With environment variables
+Here are some other ways to run the script:
+
+```
+# custom path to service_account.json
+gis seogets.com --path /path/to/service_account.json
+# long version command
+google-indexing-script seogets.com
+# cloned repository
+npm run index seogets.com
+```
+</details>
+
+<details>
+<summary>With environment variables</summary>
 
 Open `service_account.json` and copy the `client_email` and `private_key` values.
-
-Set the environment variables `GOOGLE_CLIENT_EMAIL` and `GOOGLE_PRIVATE_KEY` with the values you copied.
-
-```bash
-export GOOGLE_CLIENT_EMAIL="your-client-email"
-export GOOGLE_PRIVATE_KEY="your-private-key"
-```
 
 Run the script with the domain or url you want to index.
 
 ```bash
-gis seogets.com
+GIS_CLIENT_EMAIL=your-client-email GIS_PRIVATE_KEY=your-private-key gis seogets.com
 ```
+</details>
 
-#### With arguments *(not recommended)*
+<details>
+<summary>With arguments <i>(not recommended)</i></summary>
 
 Open `service_account.json` and copy the `client_email` and `private_key` values.
 
@@ -74,43 +110,7 @@ Once you have the values, run the script with the domain or url you want to inde
 ```bash
 gis seogets.com your-client-email your-private-key
 ```
-
-### Using the repository
-
-Clone the repository to your machine.
-
-```bash
-git clone https://github.com/goenning/google-indexing-script.git
-cd google-indexing-script
-```
-
-Copy the `service_account.json` file to the repository folder.
-
-```bash
-mv /path/to/service_account.json .
-```
-
-Install the dependencies.
-
-```bash
-npm install
-```
-
-Run the script with the domain or url you want to index.
-
-```bash
-npm run index seogets.com
-```
-
-## Usage
-
-1. Open a terminal and navigate to the folder where you cloned the repository
-2. Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v`.
-3. Run `npm install` to install the dependencies
-4. Run `npm run index <domain or url>` to index all the pages of your site.
-- If your site is a `Domain` Property on GSC, then run it like `npm run index seogets.com`
-- Otherwise, if it's a `URL Prefix` property, then run it like `npm run index https://seogets.com`
-- When in doubt try both 😀
+</details>
 
 Here's an example of what you should expect:
 
