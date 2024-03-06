@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "commit": false,
+  "fixed": [["google-indexing-script"]],
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "goenning/google-indexing-script" }
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch"
+}
