@@ -8,6 +8,10 @@ export function convertToSiteUrl(input: string) {
   return `sc-domain:${input}`;
 }
 
+export function convertToFilePath(path: string) {
+  return path.replace("http://", "http_").replace("https://", "https_").replace("/", "_");
+}
+
 export async function getPageIndexingStatus(
   accessToken: string,
   siteUrl: string,

@@ -5,30 +5,41 @@ import {
   requestIndexing,
   getEmojiForStatus,
   getPageIndexingStatus,
+  convertToFilePath,
 } from "./shared/gsc";
 import { getSitemapPages } from "./shared/sitemap";
 import { Status } from "./shared/types";
-import { batch } from "./shared/utils";
+import { batch, parseCommandLineArgs } from "./shared/utils";
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
+import path from "path";
 
 const CACHE_TIMEOUT = 1000 * 60 * 60 * 24 * 14; // 14 days
 
-const main = async () => {
-  const input = process.argv[2];
+export type IndexOptions = {
+  client_email?: string;
+  private_key?: string;
+  path?: string;
+};
 
+export const index = async (
+  input: string = process.argv[2],
+  options: IndexOptions = {},
+) => {
   if (!input) {
     console.error("❌ Please provide a domain or site URL as the first argument.");
     console.error("");
     process.exit(1);
   }
 
-  const accessToken = await getAccessToken();
+  const args = parseCommandLineArgs(process.argv.slice(2));
+  options.client_email = args['client-email'] || process.env.GIS_CLIENT_EMAIL;
+  options.private_key = args['private-key'] || process.env.GIS_PRIVATE_KEY;
+  options.path = args['path'] || process.env.GIS_PATH;
+
+  const accessToken = await getAccessToken(options.client_email, options.private_key, options.path);
   const siteUrl = convertToSiteUrl(input);
   console.log(`🔎 Processing site: ${siteUrl}`);
-  const cachePath = `.cache/${siteUrl
-    .replace("http://", "http_")
-    .replace("https://", "https_")
-    .replace("/", "_")}.json`;
+  const cachePath = path.join(".cache", `${convertToFilePath(siteUrl)}.json`);
 
   if (!accessToken) {
     console.error("❌ Failed to get access token, check your service account credentials.");
@@ -135,4 +146,4 @@ const main = async () => {
   console.log(``);
 };
 
-main();
+export * from "./shared";

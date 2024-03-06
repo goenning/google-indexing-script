@@ -16,30 +16,109 @@ You can read more about the motivation behind it and how it works in this blog p
 
 ## Preparation
 
-1. Download or clone this repository
-2. Follow this [guide](https://developers.google.com/search/apis/indexing-api/v3/prereqs) from Google. By the end of it, you should have a project on Google Cloud with the Indexing API enabled, a service account with the `Owner` permission on your sites.
-3. Make sure you enable both `Google Search Console API` and `Web Search Indexing API` on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
-4. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
+1. Follow this [guide](https://developers.google.com/search/apis/indexing-api/v3/prereqs) from Google. By the end of it, you should have a project on Google Cloud with the Indexing API enabled, a service account with the `Owner` permission on your sites.
+2. Make sure you enable both `Google Search Console API` and `Web Search Indexing API` on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
+3. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
+
+
+## Installation
+
+### Using CLI
+
+Install the cli globally on your machine.
+
+```bash
+npm i -g google-indexing-script
+```
+
+### Using the repository
+
+Clone the repository to your machine.
+
+```bash
+git clone https://github.com/goenning/google-indexing-script.git
+cd google-indexing-script
+```
+
+Install and build the project.
+
+```bash
+npm install
+npm run build
+npm i -g .
+```
+
+> [!NOTE]
+> Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v`.
 
 ## Usage
 
-1. Open a terminal and navigate to the folder where you cloned the repository
-2. Ensure you are using an up-to-date Node.js version, with a preference for v20 or later. Check your current version with `node -v`.
-3. Run `npm install` to install the dependencies
-4. Run `npm run index <domain or url>` to index all the pages of your site.
-- If your site is a `Domain` Property on GSC, then run it like `npm run index seogets.com`
-- Otherwise, if it's a `URL Prefix` property, then run it like `npm run index https://seogets.com`
-- When in doubt try both 😀
+<details open>
+<summary>With <code>service_account.json</code> <i>(recommended)</i></summary>
+
+Create a `.gis` directory in your home folder and move the `service_account.json` file there.
+
+```bash
+mkdir ~/.gis
+mv service_account.json ~/.gis
+```
+
+Run the script with the domain or url you want to index.
+
+```bash
+gis <domain or url>
+# `domain` property on gsc
+gis seogets.com
+# `url prefix` property on gsc
+gis https://seogets.com
+```
+
+When in doubt try both 😀
+
+Here are some other ways to run the script:
+
+```bash
+# custom path to service_account.json
+gis seogets.com --path /path/to/service_account.json
+# long version command
+google-indexing-script seogets.com
+# cloned repository
+npm run index seogets.com
+```
+</details>
+
+<details>
+<summary>With environment variables</summary>
+
+Open `service_account.json` and copy the `client_email` and `private_key` values.
+
+Run the script with the domain or url you want to index.
+
+```bash
+GIS_CLIENT_EMAIL=your-client-email GIS_PRIVATE_KEY=your-private-key gis seogets.com
+```
+</details>
+
+<details>
+<summary>With arguments <i>(not recommended)</i></summary>
+
+Open `service_account.json` and copy the `client_email` and `private_key` values.
+
+Once you have the values, run the script with the domain or url you want to index, the client email and the private key.
+
+```bash
+gis seogets.com --client-email your-client-email --private-key your-private-key
+```
+</details>
 
 Here's an example of what you should expect:
 
 ![](./output.png)
 
-**Important Notes:**
-
-- Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
-- You can run the script as many times as you want. It will only index the pages that are not already indexed.
-- Sites with a large number of pages might take a while to index, be patient.
+> [!IMPORTANT]
+> - Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
+> - You can run the script as many times as you want. It will only index the pages that are not already indexed.
+> - Sites with a large number of pages might take a while to index, be patient.
 
 ## 📄 License
 
