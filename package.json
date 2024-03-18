@@ -17,6 +17,7 @@
     "cli",
     "typescript"
   ],
+  "license": "MIT",
   "scripts": {
     "index": "ts-node ./src/cli.ts",
     "build": "tsup",
