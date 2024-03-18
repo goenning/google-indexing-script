@@ -21,6 +21,11 @@ export type IndexOptions = {
   path?: string;
 };
 
+/**
+ * Indexes the specified domain or site URL.
+ * @param input - The domain or site URL to index.
+ * @param options - (Optional) Additional options for indexing.
+ */
 export const index = async (
   input: string = process.argv[2],
   options: IndexOptions = {},

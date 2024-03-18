@@ -1,6 +1,11 @@
 import { Status } from "./types";
 import { fetchRetry } from "./utils";
 
+/**
+ * Converts a given input string to a valid Google Search Console site URL format.
+ * @param input - The input string to be converted.
+ * @returns The converted site URL (domain.com or https://domain.com/)
+ */
 export function convertToSiteUrl(input: string) {
   if (input.startsWith("http://") || input.startsWith("https://")) {
     return input.endsWith("/") ? input : `${input}/`;
@@ -8,10 +13,22 @@ export function convertToSiteUrl(input: string) {
   return `sc-domain:${input}`;
 }
 
+/**
+ * Converts a given file path to a formatted version suitable for use as a file name.
+ * @param path - The url to be converted as a file name
+ * @returns The converted file path
+ */
 export function convertToFilePath(path: string) {
   return path.replace("http://", "http_").replace("https://", "https_").replace("/", "_");
 }
 
+/**
+ * Retrieves the indexing status of a page.
+ * @param accessToken - The access token for authentication.
+ * @param siteUrl - The URL of the site.
+ * @param inspectionUrl - The URL of the page to inspect.
+ * @returns A promise resolving to the status of indexing.
+ */
 export async function getPageIndexingStatus(
   accessToken: string,
   siteUrl: string,
@@ -58,6 +75,11 @@ export async function getPageIndexingStatus(
   }
 }
 
+/**
+ * Retrieves an emoji representation corresponding to the given status.
+ * @param status - The status for which to retrieve the emoji.
+ * @returns The emoji representing the status.
+ */
 export function getEmojiForStatus(status: Status) {
   switch (status) {
     case Status.SubmittedAndIndexed:
@@ -78,6 +100,12 @@ export function getEmojiForStatus(status: Status) {
   }
 }
 
+/**
+ * Retrieves metadata for publishing from the given URL.
+ * @param accessToken - The access token for authentication.
+ * @param url - The URL for which to retrieve metadata.
+ * @returns The status of the request.
+ */
 export async function getPublishMetadata(accessToken: string, url: string) {
   const response = await fetchRetry(
     `https://indexing.googleapis.com/v3/urlNotifications/metadata?url=${encodeURIComponent(url)}`,
@@ -114,6 +142,11 @@ export async function getPublishMetadata(accessToken: string, url: string) {
   return response.status;
 }
 
+/**
+ * Requests indexing for the given URL.
+ * @param accessToken - The access token for authentication.
+ * @param url - The URL to be indexed.
+ */
 export async function requestIndexing(accessToken: string, url: string) {
   const response = await fetchRetry("https://indexing.googleapis.com/v3/urlNotifications:publish", {
     method: "POST",
