@@ -110,18 +110,10 @@ gis seogets.com --client-email your-client-email --private-key your-private-key
 ```
 </details>
 
-Here's an example of what you should expect:
+<details>
+<summary>As a npm module</summary>
 
-![](./output.png)
-
-> [!IMPORTANT]
-> - Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
-> - You can run the script as many times as you want. It will only index the pages that are not already indexed.
-> - Sites with a large number of pages might take a while to index, be patient.
-
-## API
-
-You can also use the script as a module in your own project.
+You can also use the script as a [npm module](https://www.npmjs.com/package/google-indexing-script) in your own project.
 
 ```bash
 npm i google-indexing-script
@@ -140,6 +132,16 @@ index('seogets.com', {
 ```
 
 Read the [API documentation](https://paka.dev/npm/google-indexing-script) for more details.
+</details>
+
+Here's an example of what you should expect:
+
+![](./output.png)
+
+> [!IMPORTANT]
+> - Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
+> - You can run the script as many times as you want. It will only index the pages that are not already indexed.
+> - Sites with a large number of pages might take a while to index, be patient.
 
 ## 📄 License
 
