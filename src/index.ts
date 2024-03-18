@@ -21,7 +21,15 @@ export type IndexOptions = {
   path?: string;
 };
 
-export const index = async (input: string = process.argv[2], options: IndexOptions = {}) => {
+/**
+ * Indexes the specified domain or site URL.
+ * @param input - The domain or site URL to index.
+ * @param options - (Optional) Additional options for indexing.
+ */
+export const index = async (
+  input: string = process.argv[2],
+  options: IndexOptions = {},
+) => {
   if (!input) {
     console.error("❌ Please provide a domain or site URL as the first argument.");
     console.error("");

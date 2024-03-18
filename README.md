@@ -20,7 +20,6 @@ You can read more about the motivation behind it and how it works in this blog p
 2. Make sure you enable both [`Google Search Console API`](https://console.cloud.google.com/apis/api/searchconsole.googleapis.com) and [`Web Search Indexing API`](https://console.cloud.google.com/apis/api/indexing.googleapis.com) on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
 3. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
 
-
 ## Installation
 
 ### Using CLI
@@ -109,6 +108,30 @@ Once you have the values, run the script with the domain or url you want to inde
 ```bash
 gis seogets.com --client-email your-client-email --private-key your-private-key
 ```
+</details>
+
+<details>
+<summary>As a npm module</summary>
+
+You can also use the script as a [npm module](https://www.npmjs.com/package/google-indexing-script) in your own project.
+
+```bash
+npm i google-indexing-script
+```
+
+```javascript
+import { index } from 'google-indexing-script'
+import serviceAccount from './service_account.json'
+
+index('seogets.com', {
+  client_email: serviceAccount.client_email,
+  private_key: serviceAccount.private_key
+})
+  .then(console.log)
+  .catch(console.error)
+```
+
+Read the [API documentation](https://paka.dev/npm/google-indexing-script) for more details.
 </details>
 
 Here's an example of what you should expect:

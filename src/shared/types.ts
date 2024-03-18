@@ -1,3 +1,6 @@
+/**
+ * Enum representing indexing status of a URL
+ */
 export enum Status {
   SubmittedAndIndexed = "Submitted and indexed",
   DuplicateWithoutUserSelectedCanonical = "Duplicate without user-selected canonical",
