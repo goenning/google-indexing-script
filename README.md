@@ -20,7 +20,6 @@ You can read more about the motivation behind it and how it works in this blog p
 2. Make sure you enable both `Google Search Console API` and `Web Search Indexing API` on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
 3. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
 
-
 ## Installation
 
 ### Using CLI
@@ -119,6 +118,28 @@ Here's an example of what you should expect:
 > - Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
 > - You can run the script as many times as you want. It will only index the pages that are not already indexed.
 > - Sites with a large number of pages might take a while to index, be patient.
+
+## API
+
+You can also use the script as a module in your own project.
+
+```bash
+npm i google-indexing-script
+```
+
+```javascript
+import { index } from 'google-indexing-script'
+import serviceAccount from './service_account.json'
+
+index('seogets.com', {
+  client_email: serviceAccount.client_email,
+  private_key: serviceAccount.private_key
+})
+  .then(console.log)
+  .catch(console.error)
+```
+
+Read the [API documentation](https://paka.dev/npm/google-indexing-script) for more details.
 
 ## 📄 License
 
