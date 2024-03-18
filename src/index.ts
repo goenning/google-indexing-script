@@ -21,10 +21,7 @@ export type IndexOptions = {
   path?: string;
 };
 
-export const index = async (
-  input: string = process.argv[2],
-  options: IndexOptions = {},
-) => {
+export const index = async (input: string = process.argv[2], options: IndexOptions = {}) => {
   if (!input) {
     console.error("❌ Please provide a domain or site URL as the first argument.");
     console.error("");
@@ -32,9 +29,15 @@ export const index = async (
   }
 
   const args = parseCommandLineArgs(process.argv.slice(2));
-  options.client_email = args['client-email'] || process.env.GIS_CLIENT_EMAIL;
-  options.private_key = args['private-key'] || process.env.GIS_PRIVATE_KEY;
-  options.path = args['path'] || process.env.GIS_PATH;
+  if (!options.client_email) {
+    options.client_email = args["client-email"] || process.env.GIS_CLIENT_EMAIL;
+  }
+  if (!options.private_key) {
+    options.private_key = args["private-key"] || process.env.GIS_PRIVATE_KEY;
+  }
+  if (!options.path) {
+    options.path = args["path"] || process.env.GIS_PATH;
+  }
 
   const accessToken = await getAccessToken(options.client_email, options.private_key, options.path);
   const siteUrl = convertToSiteUrl(input);
