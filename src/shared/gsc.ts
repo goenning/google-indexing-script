@@ -1,3 +1,4 @@
+import { webmasters_v3 } from "googleapis";
 import { Status } from "./types";
 import { fetchRetry } from "./utils";
 
@@ -20,6 +21,126 @@ export function convertToSiteUrl(input: string) {
  */
 export function convertToFilePath(path: string) {
   return path.replace("http://", "http_").replace("https://", "https_").replace("/", "_");
+}
+
+/**
+ * Converts an HTTP URL to a sc-domain URL format.
+ * @param httpUrl The HTTP URL to be converted.
+ * @returns The sc-domain formatted URL.
+ */
+export function convertToSCDomain(httpUrl: string) {
+  return `sc-domain:${httpUrl.replace("http://", "").replace("https://", "").replace("/", "")}`;
+}
+
+/**
+ * Converts a domain to an HTTP URL.
+ * @param domain The domain to be converted.
+ * @returns The HTTP URL.
+ */
+export function convertToHTTP(domain: string) {
+  return `http://${domain}/`;
+}
+
+/**
+ * Converts a domain to an HTTPS URL.
+ * @param domain The domain to be converted.
+ * @returns The HTTPS URL.
+ */
+export function convertToHTTPS(domain: string) {
+  return `https://${domain}/`;
+}
+
+/**
+ * Retrieves a list of sites associated with the specified service account from the Google Webmasters API.
+ * @param accessToken - The access token for authentication.
+ * @returns An array containing the site URLs associated with the service account.
+ */
+export async function getSites(accessToken: string) {
+  const sitesResponse = await fetchRetry('https://www.googleapis.com/webmasters/v3/sites', {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (sitesResponse.status === 403) {
+    console.error('🔐 This service account doesn\'t have access to any sites.');
+    return [];
+  }
+
+  const sitesBody: webmasters_v3.Schema$SitesListResponse = await sitesResponse.json();
+
+  if (!sitesBody.siteEntry) {
+    console.error('❌ No sites found, add them to Google Search Console and try again.');
+    return [];
+  }
+
+  return sitesBody.siteEntry.map((x) => x.siteUrl);
+}
+
+/**
+ * Checks if the site URL is valid and accessible by the service account.
+ * @param accessToken - The access token for authentication.
+ * @param siteUrl - The URL of the site to check.
+ * @returns The corrected URL if found, otherwise the original site URL.
+ */
+export async function checkSiteUrl(
+  accessToken: string,
+  siteUrl: string
+) {
+  const sites = await getSites(accessToken);
+  
+  if (!sites.includes(siteUrl)) {
+    if (siteUrl.startsWith("sc-domain:")) {
+      if (sites.includes(convertToHTTP(siteUrl.replace("sc-domain:", "")))) {
+        const correctUrl = convertToHTTP(siteUrl.replace("sc-domain:", ""));
+        console.warn(`🚨 Found HTTP version of the site, please next time use this format instead: ${correctUrl}`);
+        return correctUrl;
+      } else if (sites.includes(convertToHTTPS(siteUrl.replace("sc-domain:", "")))) {
+        const correctUrl = convertToHTTPS(siteUrl.replace("sc-domain:", ""));
+        console.warn(`🚨 Found HTTPS version of the site, please next time use this format instead: ${correctUrl}`);
+        return  correctUrl;
+      } else {
+        console.error("❌ This service account doesn't have access to this site.");
+        console.error("");
+        process.exit(1);
+      }
+    } else if (siteUrl.startsWith("https://")) {
+      if (sites.includes(convertToHTTP(siteUrl))) {
+        const correctUrl = convertToHTTP(siteUrl);
+        console.warn(`🚨 Found HTTP version of the site, please next time use this format instead: ${correctUrl}`);
+        return correctUrl;
+      } else if (sites.includes(convertToSCDomain(siteUrl))) {
+        const correctUrl = convertToSCDomain(siteUrl);
+        console.warn(`🚨 Found sc-domain version of the site, please next time use this format instead: ${correctUrl.replace("sc-domain:", "")}`);
+        return correctUrl;
+      } else {
+        console.error("❌ This service account doesn't have access to this site.");
+        console.error("");
+        process.exit(1);
+      }
+    } else if (siteUrl.startsWith("http://")) {
+      if (sites.includes(convertToHTTPS(siteUrl))) {
+        const correctUrl = convertToHTTPS(siteUrl);
+        console.warn(`🚨 Found HTTPS version of the site, please next time use this format instead: ${correctUrl}`);
+        return correctUrl;
+      } else if (sites.includes(convertToSCDomain(siteUrl))) {
+        const correctUrl = convertToSCDomain(siteUrl);
+        console.warn(`🚨 Found sc-domain version of the site, please next time use this format instead: ${correctUrl.replace("sc-domain:", "")}`);
+        return correctUrl;
+      } else {
+        console.error("❌ This service account doesn't have access to this site.");
+        console.error("");
+        process.exit(1);
+      }
+    } else {
+      console.error("❌ Unknown site URL format.");
+      console.error("");
+      process.exit(1);
+    }
+  } else {
+    return siteUrl;
+  }
 }
 
 /**

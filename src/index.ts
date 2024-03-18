@@ -6,6 +6,7 @@ import {
   getEmojiForStatus,
   getPageIndexingStatus,
   convertToFilePath,
+  checkSiteUrl,
 } from "./shared/gsc";
 import { getSitemapPages } from "./shared/sitemap";
 import { Status } from "./shared/types";
@@ -48,7 +49,7 @@ export const index = async (
   }
 
   const accessToken = await getAccessToken(options.client_email, options.private_key, options.path);
-  const siteUrl = convertToSiteUrl(input);
+  let siteUrl = convertToSiteUrl(input);
   console.log(`🔎 Processing site: ${siteUrl}`);
   const cachePath = path.join(".cache", `${convertToFilePath(siteUrl)}.json`);
 
@@ -57,6 +58,8 @@ export const index = async (
     console.error("");
     process.exit(1);
   }
+
+  siteUrl = await checkSiteUrl(accessToken, siteUrl);
 
   const [sitemaps, pages] = await getSitemapPages(accessToken, siteUrl);
 
