@@ -17,7 +17,7 @@ You can read more about the motivation behind it and how it works in this blog p
 ## Preparation
 
 1. Follow this [guide](https://developers.google.com/search/apis/indexing-api/v3/prereqs) from Google. By the end of it, you should have a project on Google Cloud with the Indexing API enabled, a service account with the `Owner` permission on your sites.
-2. Make sure you enable both `Google Search Console API` and `Web Search Indexing API` on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
+2. Make sure you enable both [`Google Search Console API`](https://console.cloud.google.com/apis/api/searchconsole.googleapis.com) and [`Web Search Indexing API`](https://console.cloud.google.com/apis/api/indexing.googleapis.com) on your [Google Project ➤ API Services ➤ Enabled API & Services](https://console.cloud.google.com/apis/dashboard).
 3. [Download the JSON](https://github.com/goenning/google-indexing-script/issues/2) file with the credentials of your service account and save it in the same folder as the script. The file should be named `service_account.json`
 
 ## Installation
