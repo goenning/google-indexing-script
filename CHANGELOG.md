@@ -1,5 +1,11 @@
 # google-indexing-script
 
+## 0.0.5
+
+### Patch Changes
+
+- [#44](https://github.com/goenning/google-indexing-script/pull/44) [`77b94ed`](https://github.com/goenning/google-indexing-script/commit/77b94edeef863721c07bd3e12d6d38052723f422) Thanks [@AntoineKM](https://github.com/AntoineKM)! - Add site url checker
+
 ## 0.0.4
 
 ### Patch Changes
