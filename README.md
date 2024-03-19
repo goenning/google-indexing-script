@@ -70,8 +70,6 @@ gis <domain or url>
 gis seogets.com
 ```
 
-When in doubt try both 😀
-
 Here are some other ways to run the script:
 
 ```bash
