@@ -56,22 +56,22 @@ export function convertToHTTPS(domain: string) {
  * @returns An array containing the site URLs associated with the service account.
  */
 export async function getSites(accessToken: string) {
-  const sitesResponse = await fetchRetry('https://www.googleapis.com/webmasters/v3/sites', {
+  const sitesResponse = await fetchRetry("https://www.googleapis.com/webmasters/v3/sites", {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
   });
 
   if (sitesResponse.status === 403) {
-    console.error('🔐 This service account doesn\'t have access to any sites.');
+    console.error("🔐 This service account doesn't have access to any sites.");
     return [];
   }
 
   const sitesBody: webmasters_v3.Schema$SitesListResponse = await sitesResponse.json();
 
   if (!sitesBody.siteEntry) {
-    console.error('❌ No sites found, add them to Google Search Console and try again.');
+    console.error("❌ No sites found, add them to Google Search Console and try again.");
     return [];
   }
 
@@ -84,63 +84,40 @@ export async function getSites(accessToken: string) {
  * @param siteUrl - The URL of the site to check.
  * @returns The corrected URL if found, otherwise the original site URL.
  */
-export async function checkSiteUrl(
-  accessToken: string,
-  siteUrl: string
-) {
+export async function checkSiteUrl(accessToken: string, siteUrl: string) {
   const sites = await getSites(accessToken);
-  
-  if (!sites.includes(siteUrl)) {
-    if (siteUrl.startsWith("sc-domain:")) {
-      if (sites.includes(convertToHTTP(siteUrl.replace("sc-domain:", "")))) {
-        const correctUrl = convertToHTTP(siteUrl.replace("sc-domain:", ""));
-        console.warn(`🚨 Found HTTP version of the site, please next time use this format instead: ${correctUrl}`);
-        return correctUrl;
-      } else if (sites.includes(convertToHTTPS(siteUrl.replace("sc-domain:", "")))) {
-        const correctUrl = convertToHTTPS(siteUrl.replace("sc-domain:", ""));
-        console.warn(`🚨 Found HTTPS version of the site, please next time use this format instead: ${correctUrl}`);
-        return  correctUrl;
-      } else {
-        console.error("❌ This service account doesn't have access to this site.");
-        console.error("");
-        process.exit(1);
-      }
-    } else if (siteUrl.startsWith("https://")) {
-      if (sites.includes(convertToHTTP(siteUrl))) {
-        const correctUrl = convertToHTTP(siteUrl);
-        console.warn(`🚨 Found HTTP version of the site, please next time use this format instead: ${correctUrl}`);
-        return correctUrl;
-      } else if (sites.includes(convertToSCDomain(siteUrl))) {
-        const correctUrl = convertToSCDomain(siteUrl);
-        console.warn(`🚨 Found sc-domain version of the site, please next time use this format instead: ${correctUrl.replace("sc-domain:", "")}`);
-        return correctUrl;
-      } else {
-        console.error("❌ This service account doesn't have access to this site.");
-        console.error("");
-        process.exit(1);
-      }
-    } else if (siteUrl.startsWith("http://")) {
-      if (sites.includes(convertToHTTPS(siteUrl))) {
-        const correctUrl = convertToHTTPS(siteUrl);
-        console.warn(`🚨 Found HTTPS version of the site, please next time use this format instead: ${correctUrl}`);
-        return correctUrl;
-      } else if (sites.includes(convertToSCDomain(siteUrl))) {
-        const correctUrl = convertToSCDomain(siteUrl);
-        console.warn(`🚨 Found sc-domain version of the site, please next time use this format instead: ${correctUrl.replace("sc-domain:", "")}`);
-        return correctUrl;
-      } else {
-        console.error("❌ This service account doesn't have access to this site.");
-        console.error("");
-        process.exit(1);
-      }
-    } else {
-      console.error("❌ Unknown site URL format.");
-      console.error("");
-      process.exit(1);
-    }
+  let formattedUrls: string[] = [];
+
+  // Convert the site URL into all possible formats
+  if (siteUrl.startsWith("https://")) {
+    formattedUrls.push(siteUrl);
+    formattedUrls.push(convertToHTTP(siteUrl));
+    formattedUrls.push(convertToSCDomain(siteUrl));
+  } else if (siteUrl.startsWith("http://")) {
+    formattedUrls.push(siteUrl);
+    formattedUrls.push(convertToHTTPS(siteUrl));
+    formattedUrls.push(convertToSCDomain(siteUrl));
+  } else if (siteUrl.startsWith("sc-domain:")) {
+    formattedUrls.push(siteUrl);
+    formattedUrls.push(convertToHTTP(siteUrl.replace("sc-domain:", "")));
+    formattedUrls.push(convertToHTTPS(siteUrl.replace("sc-domain:", "")));
   } else {
-    return siteUrl;
+    console.error("❌ Unknown site URL format.");
+    console.error("");
+    process.exit(1);
   }
+
+  // Check if any of the formatted URLs are accessible
+  for (const formattedUrl of formattedUrls) {
+    if (sites.includes(formattedUrl)) {
+      return formattedUrl;
+    }
+  }
+
+  // If none of the formatted URLs are accessible
+  console.error("❌ This service account doesn't have access to this site.");
+  console.error("");
+  process.exit(1);
 }
 
 /**
