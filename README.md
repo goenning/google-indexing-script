@@ -66,10 +66,8 @@ Run the script with the domain or url you want to index.
 
 ```bash
 gis <domain or url>
-# `domain` property on gsc
+# example
 gis seogets.com
-# `url prefix` property on gsc
-gis https://seogets.com
 ```
 
 When in doubt try both 😀
