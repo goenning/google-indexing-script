@@ -139,6 +139,10 @@ Here's an example of what you should expect:
 > - You can run the script as many times as you want. It will only index the pages that are not already indexed.
 > - Sites with a large number of pages might take a while to index, be patient.
 
+## 🔀 Alternative
+
+If you prefer a hands-free, and less technical solution, you can use a SaaS platform like [TagParrot](https://tagparrot.com/?via=goenning).
+
 ## 📄 License
 
 MIT License
