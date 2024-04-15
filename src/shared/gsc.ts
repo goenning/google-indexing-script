@@ -20,7 +20,7 @@ export function convertToSiteUrl(input: string) {
  * @returns The converted file path
  */
 export function convertToFilePath(path: string) {
-  return path.replace("http://", "http_").replace("https://", "https_").replace("/", "_");
+  return path.replace("http://", "http_").replace("https://", "https_").replaceAll("/", "_");
 }
 
 /**
