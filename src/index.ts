@@ -51,7 +51,8 @@ export const index = async (
   const accessToken = await getAccessToken(options.client_email, options.private_key, options.path);
   let siteUrl = convertToSiteUrl(input);
   console.log(`🔎 Processing site: ${siteUrl}`);
-  const cachePath = path.join(".cache", `${convertToFilePath(siteUrl)}.json`);
+  const cacheFileName = `${convertToFilePath(siteUrl)}`+".json";
+  const cachePath = path.join(".cache", cacheFileName.replace("/", ""));
 
   if (!accessToken) {
     console.error("❌ Failed to get access token, check your service account credentials.");
