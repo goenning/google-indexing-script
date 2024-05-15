@@ -20,6 +20,7 @@ export type IndexOptions = {
   client_email?: string;
   private_key?: string;
   path?: string;
+  urls?: string[];
 };
 
 /**
@@ -47,6 +48,9 @@ export const index = async (
   if (!options.path) {
     options.path = args["path"] || process.env.GIS_PATH;
   }
+  if (!options.urls) {
+    options.urls = args["urls"] ? args["urls"].split(",") : undefined;
+  }
 
   const accessToken = await getAccessToken(options.client_email, options.private_key, options.path);
   let siteUrl = convertToSiteUrl(input);
@@ -61,16 +65,22 @@ export const index = async (
 
   siteUrl = await checkSiteUrl(accessToken, siteUrl);
 
-  const [sitemaps, pages] = await getSitemapPages(accessToken, siteUrl);
+  let pages = options.urls || [];
+  if (pages.length === 0) {
+    console.log(`🔎 Fetching sitemaps and pages...`);
+    const [sitemaps, pagesFromSitemaps] = await getSitemapPages(accessToken, siteUrl);
 
-  if (sitemaps.length === 0) {
-    console.error("❌ No sitemaps found, add them to Google Search Console and try again.");
-    console.error("");
-    process.exit(1);
+    if (sitemaps.length === 0) {
+      console.error("❌ No sitemaps found, add them to Google Search Console and try again.");
+      console.error("");
+      process.exit(1);
+    }
+
+    console.log(`👉 Found ${pages.length} URLs in ${sitemaps.length} sitemap`);
+
+    pages = pagesFromSitemaps;
   }
-
-  console.log(`👉 Found ${pages.length} URLs in ${sitemaps.length} sitemap`);
-
+  
   const statusPerUrl: Record<string, { status: Status; lastCheckedAt: string }> = existsSync(cachePath)
     ? JSON.parse(readFileSync(cachePath, "utf8"))
     : {};
