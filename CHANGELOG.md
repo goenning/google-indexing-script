@@ -1,11 +1,5 @@
 # google-indexing-script
 
-## 0.0.6
-
-### Patch Changes
-
-- [#53](https://github.com/goenning/google-indexing-script/pull/53) [`621444c`](https://github.com/goenning/google-indexing-script/commit/621444cc57d9cff1cc5333747c848746fdffeb52) Thanks [@urbanisierung](https://github.com/urbanisierung)! - feat(get-publish-metadata): optional retries if rate limited
-
 ## 0.0.5
 
 ### Patch Changes
