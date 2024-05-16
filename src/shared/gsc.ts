@@ -1,4 +1,5 @@
 import { webmasters_v3 } from "googleapis";
+import { QUOTA } from "..";
 import { Status } from "./types";
 import { fetchRetry } from "./utils";
 
@@ -202,9 +203,10 @@ export function getEmojiForStatus(status: Status) {
  * Retrieves metadata for publishing from the given URL.
  * @param accessToken - The access token for authentication.
  * @param url - The URL for which to retrieve metadata.
+ * @param options - The options for the request.
  * @returns The status of the request.
  */
-export async function getPublishMetadata(accessToken: string, url: string) {
+export async function getPublishMetadata(accessToken: string, url: string, options?: { retriesOnRateLimit: number }) {
   const response = await fetchRetry(
     `https://indexing.googleapis.com/v3/urlNotifications/metadata?url=${encodeURIComponent(url)}`,
     {
@@ -223,12 +225,23 @@ export async function getPublishMetadata(accessToken: string, url: string) {
   }
 
   if (response.status === 429) {
-    console.error("🚦 Rate limit exceeded, try again later.");
-    console.error("");
-    console.error("   Quota: https://developers.google.com/search/apis/indexing-api/v3/quota-pricing#quota");
-    console.error("   Usage: https://console.cloud.google.com/apis/enabled");
-    console.error("");
-    process.exit(1);
+    if (options?.retriesOnRateLimit && options?.retriesOnRateLimit > 0) {
+      const RPM_WATING_TIME = (QUOTA.rpm.retries - options.retriesOnRateLimit + 1) * QUOTA.rpm.waitingTime; // increase waiting time for each retry
+      console.log(
+        `🚦 Rate limit exceeded for read requests. Retries left: ${options.retriesOnRateLimit}. Waiting for ${
+          RPM_WATING_TIME / 1000
+        }sec.`
+      );
+      await new Promise((resolve) => setTimeout(resolve, RPM_WATING_TIME));
+      await getPublishMetadata(accessToken, url, { retriesOnRateLimit: options.retriesOnRateLimit - 1 });
+    } else {
+      console.error("🚦 Rate limit exceeded, try again later.");
+      console.error("");
+      console.error("   Quota: https://developers.google.com/search/apis/indexing-api/v3/quota-pricing#quota");
+      console.error("   Usage: https://console.cloud.google.com/apis/enabled");
+      console.error("");
+      process.exit(1);
+    }
   }
 
   if (response.status >= 500) {

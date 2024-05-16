@@ -15,11 +15,20 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 
 const CACHE_TIMEOUT = 1000 * 60 * 60 * 24 * 14; // 14 days
+export const QUOTA = {
+  rpm: {
+    retries: 3,
+    waitingTime: 60000, // 1 minute
+  },
+};
 
 export type IndexOptions = {
   client_email?: string;
   private_key?: string;
   path?: string;
+  quota?: {
+    rpmRetry?: boolean; // read requests per minute: retry after waiting time
+  };
 };
 
 /**
@@ -27,10 +36,7 @@ export type IndexOptions = {
  * @param input - The domain or site URL to index.
  * @param options - (Optional) Additional options for indexing.
  */
-export const index = async (
-  input: string = process.argv[2],
-  options: IndexOptions = {},
-) => {
+export const index = async (input: string = process.argv[2], options: IndexOptions = {}) => {
   if (!input) {
     console.error("❌ Please provide a domain or site URL as the first argument.");
     console.error("");
@@ -46,6 +52,11 @@ export const index = async (
   }
   if (!options.path) {
     options.path = args["path"] || process.env.GIS_PATH;
+  }
+  if (!options.quota) {
+    options.quota = {
+      rpmRetry: args["rpm-retry"] === "true" || process.env.GIS_QUOTA_RPM_RETRY === "true",
+    };
   }
 
   const accessToken = await getAccessToken(options.client_email, options.private_key, options.path);
@@ -145,7 +156,9 @@ export const index = async (
 
   for (const url of indexablePages) {
     console.log(`📄 Processing url: ${url}`);
-    const status = await getPublishMetadata(accessToken, url);
+    const status = await getPublishMetadata(accessToken, url, {
+      retriesOnRateLimit: options.quota.rpmRetry ? QUOTA.rpm.retries : 0,
+    });
     if (status === 404) {
       await requestIndexing(accessToken, url);
       console.log("🚀 Indexing requested successfully. It may take a few days for Google to process it.");
