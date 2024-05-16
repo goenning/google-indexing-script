@@ -1,5 +1,11 @@
 # google-indexing-script
 
+## 0.1.0
+
+### Minor Changes
+
+- [#55](https://github.com/goenning/google-indexing-script/pull/55) [`908938a`](https://github.com/goenning/google-indexing-script/commit/908938a701d964b75331e322fbea8d77e6db976e) Thanks [@AntoineKM](https://github.com/AntoineKM)! - feat(get-publish-metadata): optional retries if rate limited
+
 ## 0.0.5
 
 ### Patch Changes
