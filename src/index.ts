@@ -31,6 +31,14 @@ export type IndexOptions = {
   };
 };
 
+function shuffleArray(array: unknown[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 /**
  * Indexes the specified domain or site URL.
  * @param input - The domain or site URL to index.
@@ -145,6 +153,8 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   const indexablePages = Object.entries(pagesPerStatus).flatMap(([status, pages]) =>
     indexableStatuses.includes(status as Status) ? pages : []
   );
+
+  shuffleArray(indexablePages);
 
   if (indexablePages.length === 0) {
     console.log(`✨ There are no pages that can be indexed. Everything is already indexed!`);
