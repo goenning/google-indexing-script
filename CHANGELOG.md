@@ -1,5 +1,11 @@
 # google-indexing-script
 
+## 0.2.0
+
+### Minor Changes
+
+- [#62](https://github.com/goenning/google-indexing-script/pull/62) [`93dd956`](https://github.com/goenning/google-indexing-script/commit/93dd956dca4065b97d6076db772560fba57aec50) Thanks [@hasanafzal8485](https://github.com/hasanafzal8485)! - Don't want the same URL use my API limit again until his previous cache limit is completed
+
 ## 0.1.0
 
 ### Minor Changes
