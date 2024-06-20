@@ -109,7 +109,7 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   const shouldRecheck = (status: Status, lastCheckedAt: string) => {
     const shouldIndexIt = indexableStatuses.includes(status);
     const isOld = new Date(lastCheckedAt) < new Date(Date.now() - CACHE_TIMEOUT);
-    return shouldIndexIt || isOld;
+    return shouldIndexIt && isOld;;
   };
 
   await batch(
