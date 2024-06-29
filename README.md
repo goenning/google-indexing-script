@@ -131,7 +131,7 @@ index("seogets.com", {
   .catch(console.error);
 ```
 
-Read the [API documentation](https://paka.dev/npm/google-indexing-script) for more details.
+Read the [API documentation](https://jsdocs.io/package/google-indexing-script) for more details.
 
 </details>
 
