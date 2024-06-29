@@ -92,11 +92,11 @@ export async function checkSiteUrl(accessToken: string, siteUrl: string) {
   // Convert the site URL into all possible formats
   if (siteUrl.startsWith("https://")) {
     formattedUrls.push(siteUrl);
-    formattedUrls.push(convertToHTTP(siteUrl));
+    formattedUrls.push(convertToHTTP(siteUrl.replace("https://", "")));
     formattedUrls.push(convertToSCDomain(siteUrl));
   } else if (siteUrl.startsWith("http://")) {
     formattedUrls.push(siteUrl);
-    formattedUrls.push(convertToHTTPS(siteUrl));
+    formattedUrls.push(convertToHTTPS(siteUrl.replace("http://", "")));
     formattedUrls.push(convertToSCDomain(siteUrl));
   } else if (siteUrl.startsWith("sc-domain:")) {
     formattedUrls.push(siteUrl);
