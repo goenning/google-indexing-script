@@ -35,3 +35,9 @@ After making your changes, you can build the project with the following command:
 ```bash
 npm run build
 ```
+
+# Pull Request
+
+1. Make sure your code is formatted with `prettier`
+2. Make sure your code passes the tests
+3. Make sure you added the changes with `npm run changeset`

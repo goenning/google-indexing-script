@@ -4,7 +4,8 @@ Use this script to get your entire site indexed on Google in less than 48 hours.
 
 You can read more about the motivation behind it and how it works in this blog post https://seogets.com/blog/google-indexing-script
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
+>
 > 1. Indexing != Ranking. This will not help your page rank on Google, it'll just let Google know about the existence of your pages.
 > 2. This script uses [Google Indexing API](https://developers.google.com/search/apis/indexing-api/v3/quickstart). We do not recommend using this script on spam/low-quality content.
 
@@ -70,8 +71,6 @@ gis <domain or url>
 gis seogets.com
 ```
 
-When in doubt try both 😀
-
 Here are some other ways to run the script:
 
 ```bash
@@ -82,6 +81,7 @@ google-indexing-script seogets.com
 # cloned repository
 npm run index seogets.com
 ```
+
 </details>
 
 <details>
@@ -94,6 +94,7 @@ Run the script with the domain or url you want to index.
 ```bash
 GIS_CLIENT_EMAIL=your-client-email GIS_PRIVATE_KEY=your-private-key gis seogets.com
 ```
+
 </details>
 
 <details>
@@ -106,6 +107,7 @@ Once you have the values, run the script with the domain or url you want to inde
 ```bash
 gis seogets.com --client-email your-client-email --private-key your-private-key
 ```
+
 </details>
 
 <details>
@@ -118,18 +120,19 @@ npm i google-indexing-script
 ```
 
 ```javascript
-import { index } from 'google-indexing-script'
-import serviceAccount from './service_account.json'
+import { index } from "google-indexing-script";
+import serviceAccount from "./service_account.json";
 
-index('seogets.com', {
+index("seogets.com", {
   client_email: serviceAccount.client_email,
-  private_key: serviceAccount.private_key
+  private_key: serviceAccount.private_key,
 })
   .then(console.log)
-  .catch(console.error)
+  .catch(console.error);
 ```
 
 Read the [API documentation](https://paka.dev/npm/google-indexing-script) for more details.
+
 </details>
 
 Here's an example of what you should expect:
@@ -137,9 +140,47 @@ Here's an example of what you should expect:
 ![](./output.png)
 
 > [!IMPORTANT]
+>
 > - Your site must have 1 or more sitemaps submitted to Google Search Console. Otherwise, the script will not be able to find the pages to index.
 > - You can run the script as many times as you want. It will only index the pages that are not already indexed.
 > - Sites with a large number of pages might take a while to index, be patient.
+
+## Quota
+
+Depending on your account several quotas are configured for the API (see [docs](https://developers.google.com/search/apis/indexing-api/v3/quota-pricing#quota)). By default the script exits as soon as the rate limit is exceeded. You can configure a retry mechanism for the read requests that apply on a per minute time frame.
+
+<details>
+<summary>With environment variables</summary>
+
+```bash
+export GIS_QUOTA_RPM_RETRY=true
+```
+
+</details>
+
+<details>
+<summary>As a npm module</summary>
+
+```javascript
+import { index } from 'google-indexing-script'
+import serviceAccount from './service_account.json'
+
+index('seogets.com', {
+  client_email: serviceAccount.client_email,
+  private_key: serviceAccount.private_key
+  quota: {
+    rpmRetry: true
+  }
+})
+  .then(console.log)
+  .catch(console.error)
+```
+
+</details>
+
+## 🔀 Alternative
+
+If you prefer a hands-free, and less technical solution, you can use a SaaS platform like [TagParrot](https://tagparrot.com/?via=goenning).
 
 ## 📄 License
 
