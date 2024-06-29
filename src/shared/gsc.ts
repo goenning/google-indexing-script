@@ -122,6 +122,35 @@ export async function checkSiteUrl(accessToken: string, siteUrl: string) {
 }
 
 /**
+ * Checks if the given URLs are valid.
+ * @param siteUrl - The URL of the site.
+ * @param urls - The URLs to check.
+ * @returns An array containing the corrected URLs if found, otherwise the original URLs
+ */
+export function checkCustomUrls(siteUrl: string, urls: string[]) {
+  const protocol = siteUrl.startsWith("http://") ? "http://" : "https://";
+  const domain = siteUrl.replace("https://", "").replace("http://", "").replace("sc-domain:", "");
+  const formattedUrls: string[] = urls.map((url) =>{
+    url = url.trim();
+    if (url.startsWith("/")) {
+      // the url is a relative path (e.g. /about)
+      return `${protocol}${domain}${url}`;
+    } else if (url.startsWith("http://") || url.startsWith("https://")) {
+      // the url is already a full url (e.g. https://domain.com/about)
+      return url;
+    } else if (url.startsWith(domain)) {
+      // the url is a full url without the protocol (e.g. domain.com/about)
+      return `${protocol}${url}`;
+    } else {
+      // the url is a relative path without the leading slash (e.g. about)
+      return `${protocol}${domain}/${url}`
+    }
+  });
+
+  return formattedUrls;
+}
+
+/**
  * Retrieves the indexing status of a page.
  * @param accessToken - The access token for authentication.
  * @param siteUrl - The URL of the site.

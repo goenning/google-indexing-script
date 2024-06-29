@@ -7,6 +7,7 @@ import {
   getPageIndexingStatus,
   convertToFilePath,
   checkSiteUrl,
+  checkCustomUrls,
 } from "./shared/gsc";
 import { getSitemapPages } from "./shared/sitemap";
 import { Status } from "./shared/types";
@@ -56,6 +57,7 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   }
   if (!options.urls) {
     options.urls = args["urls"] ? args["urls"].split(",") : undefined;
+  }
   if (!options.quota) {
     options.quota = {
       rpmRetry: args["rpm-retry"] === "true" || process.env.GIS_QUOTA_RPM_RETRY === "true",
@@ -86,9 +88,12 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
       process.exit(1);
     }
 
-    console.log(`👉 Found ${pages.length} URLs in ${sitemaps.length} sitemap`);
-
     pages = pagesFromSitemaps;
+
+    console.log(`👉 Found ${pages.length} URLs in ${sitemaps.length} sitemap`);
+  } else {
+    pages = checkCustomUrls(siteUrl, pages);
+    console.log(`👉 Found ${pages.length} URLs in the provided list`);
   }
   
   const statusPerUrl: Record<string, { status: Status; lastCheckedAt: string }> = existsSync(cachePath)
