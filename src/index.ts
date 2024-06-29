@@ -95,7 +95,7 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
     pages = checkCustomUrls(siteUrl, pages);
     console.log(`👉 Found ${pages.length} URLs in the provided list`);
   }
-  
+
   const statusPerUrl: Record<string, { status: Status; lastCheckedAt: string }> = existsSync(cachePath)
     ? JSON.parse(readFileSync(cachePath, "utf8"))
     : {};
@@ -123,7 +123,7 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   const shouldRecheck = (status: Status, lastCheckedAt: string) => {
     const shouldIndexIt = indexableStatuses.includes(status);
     const isOld = new Date(lastCheckedAt) < new Date(Date.now() - CACHE_TIMEOUT);
-    return shouldIndexIt && isOld;;
+    return shouldIndexIt && isOld;
   };
 
   await batch(

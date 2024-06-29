@@ -130,7 +130,7 @@ export async function checkSiteUrl(accessToken: string, siteUrl: string) {
 export function checkCustomUrls(siteUrl: string, urls: string[]) {
   const protocol = siteUrl.startsWith("http://") ? "http://" : "https://";
   const domain = siteUrl.replace("https://", "").replace("http://", "").replace("sc-domain:", "");
-  const formattedUrls: string[] = urls.map((url) =>{
+  const formattedUrls: string[] = urls.map((url) => {
     url = url.trim();
     if (url.startsWith("/")) {
       // the url is a relative path (e.g. /about)
@@ -143,7 +143,7 @@ export function checkCustomUrls(siteUrl: string, urls: string[]) {
       return `${protocol}${url}`;
     } else {
       // the url is a relative path without the leading slash (e.g. about)
-      return `${protocol}${domain}/${url}`
+      return `${protocol}${domain}/${url}`;
     }
   });
 
