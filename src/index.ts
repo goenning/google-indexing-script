@@ -7,6 +7,7 @@ import {
   getPageIndexingStatus,
   convertToFilePath,
   checkSiteUrl,
+  checkCustomUrls,
 } from "./shared/gsc";
 import { getSitemapPages } from "./shared/sitemap";
 import { Status } from "./shared/types";
@@ -26,6 +27,7 @@ export type IndexOptions = {
   client_email?: string;
   private_key?: string;
   path?: string;
+  urls?: string[];
   quota?: {
     rpmRetry?: boolean; // read requests per minute: retry after waiting time
   };
@@ -53,6 +55,9 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   if (!options.path) {
     options.path = args["path"] || process.env.GIS_PATH;
   }
+  if (!options.urls) {
+    options.urls = args["urls"] ? args["urls"].split(",") : undefined;
+  }
   if (!options.quota) {
     options.quota = {
       rpmRetry: args["rpm-retry"] === "true" || process.env.GIS_QUOTA_RPM_RETRY === "true",
@@ -72,15 +77,24 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
 
   siteUrl = await checkSiteUrl(accessToken, siteUrl);
 
-  const [sitemaps, pages] = await getSitemapPages(accessToken, siteUrl);
+  let pages = options.urls || [];
+  if (pages.length === 0) {
+    console.log(`🔎 Fetching sitemaps and pages...`);
+    const [sitemaps, pagesFromSitemaps] = await getSitemapPages(accessToken, siteUrl);
 
-  if (sitemaps.length === 0) {
-    console.error("❌ No sitemaps found, add them to Google Search Console and try again.");
-    console.error("");
-    process.exit(1);
+    if (sitemaps.length === 0) {
+      console.error("❌ No sitemaps found, add them to Google Search Console and try again.");
+      console.error("");
+      process.exit(1);
+    }
+
+    pages = pagesFromSitemaps;
+
+    console.log(`👉 Found ${pages.length} URLs in ${sitemaps.length} sitemap`);
+  } else {
+    pages = checkCustomUrls(siteUrl, pages);
+    console.log(`👉 Found ${pages.length} URLs in the provided list`);
   }
-
-  console.log(`👉 Found ${pages.length} URLs in ${sitemaps.length} sitemap`);
 
   const statusPerUrl: Record<string, { status: Status; lastCheckedAt: string }> = existsSync(cachePath)
     ? JSON.parse(readFileSync(cachePath, "utf8"))
@@ -109,7 +123,7 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   const shouldRecheck = (status: Status, lastCheckedAt: string) => {
     const shouldIndexIt = indexableStatuses.includes(status);
     const isOld = new Date(lastCheckedAt) < new Date(Date.now() - CACHE_TIMEOUT);
-    return shouldIndexIt && isOld;;
+    return shouldIndexIt && isOld;
   };
 
   await batch(

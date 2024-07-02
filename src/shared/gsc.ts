@@ -92,11 +92,11 @@ export async function checkSiteUrl(accessToken: string, siteUrl: string) {
   // Convert the site URL into all possible formats
   if (siteUrl.startsWith("https://")) {
     formattedUrls.push(siteUrl);
-    formattedUrls.push(convertToHTTP(siteUrl));
+    formattedUrls.push(convertToHTTP(siteUrl.replace("https://", "")));
     formattedUrls.push(convertToSCDomain(siteUrl));
   } else if (siteUrl.startsWith("http://")) {
     formattedUrls.push(siteUrl);
-    formattedUrls.push(convertToHTTPS(siteUrl));
+    formattedUrls.push(convertToHTTPS(siteUrl.replace("http://", "")));
     formattedUrls.push(convertToSCDomain(siteUrl));
   } else if (siteUrl.startsWith("sc-domain:")) {
     formattedUrls.push(siteUrl);
@@ -119,6 +119,35 @@ export async function checkSiteUrl(accessToken: string, siteUrl: string) {
   console.error("❌ This service account doesn't have access to this site.");
   console.error("");
   process.exit(1);
+}
+
+/**
+ * Checks if the given URLs are valid.
+ * @param siteUrl - The URL of the site.
+ * @param urls - The URLs to check.
+ * @returns An array containing the corrected URLs if found, otherwise the original URLs
+ */
+export function checkCustomUrls(siteUrl: string, urls: string[]) {
+  const protocol = siteUrl.startsWith("http://") ? "http://" : "https://";
+  const domain = siteUrl.replace("https://", "").replace("http://", "").replace("sc-domain:", "");
+  const formattedUrls: string[] = urls.map((url) => {
+    url = url.trim();
+    if (url.startsWith("/")) {
+      // the url is a relative path (e.g. /about)
+      return `${protocol}${domain}${url}`;
+    } else if (url.startsWith("http://") || url.startsWith("https://")) {
+      // the url is already a full url (e.g. https://domain.com/about)
+      return url;
+    } else if (url.startsWith(domain)) {
+      // the url is a full url without the protocol (e.g. domain.com/about)
+      return `${protocol}${url}`;
+    } else {
+      // the url is a relative path without the leading slash (e.g. about)
+      return `${protocol}${domain}/${url}`;
+    }
+  });
+
+  return formattedUrls;
 }
 
 /**
