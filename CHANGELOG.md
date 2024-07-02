@@ -1,5 +1,15 @@
 # google-indexing-script
 
+## 0.3.0
+
+### Minor Changes
+
+- [#65](https://github.com/goenning/google-indexing-script/pull/65) [`e0c31f8`](https://github.com/goenning/google-indexing-script/commit/e0c31f837acfe2083843436050b40f21f3806838) Thanks [@AntoineKM](https://github.com/AntoineKM)! - Add custom URLs option
+
+### Patch Changes
+
+- [#65](https://github.com/goenning/google-indexing-script/pull/65) [`e0c31f8`](https://github.com/goenning/google-indexing-script/commit/e0c31f837acfe2083843436050b40f21f3806838) Thanks [@AntoineKM](https://github.com/AntoineKM)! - Fix siteUrls convertions
+
 ## 0.2.0
 
 ### Minor Changes
