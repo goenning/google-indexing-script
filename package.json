@@ -1,5 +1,6 @@
 {
   "name": "google-indexing-script",
+  "description": "Script to get your site indexed on Google in less than 48 hours",
   "version": "0.3.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -27,7 +28,10 @@
     "release": "changeset publish"
   },
   "dependencies": {
+    "commander": "^12.1.0",
     "googleapis": "131.0.0",
+    "picocolors": "^1.0.1",
+    "prompts": "^2.4.2",
     "sitemapper": "3.2.8"
   },
   "prettier": {
@@ -36,6 +40,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
+    "@types/prompts": "^2.4.9",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"
