@@ -28,6 +28,7 @@
     "release": "changeset publish"
   },
   "dependencies": {
+    "@clack/prompts": "^0.7.0",
     "commander": "^12.1.0",
     "googleapis": "131.0.0",
     "picocolors": "^1.0.1",
