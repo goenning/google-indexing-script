@@ -7,10 +7,11 @@ const program = new Command(packageJson.name);
 
 program
   .alias("gis")
-  .version(packageJson.version, "-v, --version")
+  .version(packageJson.version, "-v, --version", "Output the current version.")
   .description(packageJson.description)
   .argument("[input]")
   .usage(`${green("[input]")} [options]`)
+  .helpOption("-h, --help", "Output usage information.")
   .option("-c, --client-email <email>", "The client email for the Google service account.")
   .option("-k, --private-key <key>", "The private key for the Google service account.")
   .option("-p, --path <path>", "The path to the Google service account credentials file.")
