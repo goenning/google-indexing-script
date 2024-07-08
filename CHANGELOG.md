@@ -1,5 +1,11 @@
 # google-indexing-script
 
+## 0.4.0
+
+### Minor Changes
+
+- [#68](https://github.com/goenning/google-indexing-script/pull/68) [`caa73f7`](https://github.com/goenning/google-indexing-script/commit/caa73f765b5d494d65a894a83bb8faf351e6d8ae) Thanks [@AntoineKM](https://github.com/AntoineKM)! - Improve CLI with commander
+
 ## 0.3.0
 
 ### Minor Changes
