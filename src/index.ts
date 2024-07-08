@@ -11,7 +11,7 @@ import {
 } from "./shared/gsc";
 import { getSitemapPages } from "./shared/sitemap";
 import { Status } from "./shared/types";
-import { batch, parseCommandLineArgs } from "./shared/utils";
+import { batch } from "./shared/utils";
 import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 
@@ -45,22 +45,21 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
     process.exit(1);
   }
 
-  const args = parseCommandLineArgs(process.argv.slice(2));
   if (!options.client_email) {
-    options.client_email = args["client-email"] || process.env.GIS_CLIENT_EMAIL;
+    options.client_email = process.env.GIS_CLIENT_EMAIL;
   }
   if (!options.private_key) {
-    options.private_key = args["private-key"] || process.env.GIS_PRIVATE_KEY;
+    options.private_key = process.env.GIS_PRIVATE_KEY;
   }
   if (!options.path) {
-    options.path = args["path"] || process.env.GIS_PATH;
+    options.path = process.env.GIS_PATH;
   }
   if (!options.urls) {
-    options.urls = args["urls"] ? args["urls"].split(",") : undefined;
+    options.urls = process.env.GIS_URLS ? process.env.GIS_URLS.split(",") : undefined;
   }
   if (!options.quota) {
     options.quota = {
-      rpmRetry: args["rpm-retry"] === "true" || process.env.GIS_QUOTA_RPM_RETRY === "true",
+      rpmRetry: process.env.GIS_QUOTA_RPM_RETRY === "true",
     };
   }
 
