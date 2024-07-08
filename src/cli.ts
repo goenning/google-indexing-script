@@ -1,12 +1,14 @@
-const { index } = require(".");
-const { Command } = require("commander");
-const packageJson = require("../package.json");
-const { green } = require("picocolors");
+import { index } from ".";
+import { Command } from "commander";
+import packageJson from "../package.json";
+import { green } from "picocolors";
 
-const program = new Command();
+const program = new Command(packageJson.name);
 
 program
+  .alias("gis")
   .version(packageJson.version, "-v, --version")
+  .description(packageJson.description)
   .argument("[input]")
   .usage(`${green("[input]")} [options]`)
   .option("-c, --client-email <email>", "The client email for the Google service account.")
