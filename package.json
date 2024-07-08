@@ -1,5 +1,6 @@
 {
   "name": "google-indexing-script",
+  "description": "Script to get your site indexed on Google in less than 48 hours",
   "version": "0.3.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -27,7 +28,9 @@
     "release": "changeset publish"
   },
   "dependencies": {
+    "commander": "^12.1.0",
     "googleapis": "131.0.0",
+    "picocolors": "^1.0.1",
     "sitemapper": "3.2.8"
   },
   "prettier": {
