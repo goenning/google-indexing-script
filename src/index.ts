@@ -120,10 +120,19 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   ];
 
   const shouldRecheck = (status: Status, lastCheckedAt: string) => {
-    const shouldIndexIt = indexableStatuses.includes(status);
+    if (status !== Status.SubmittedAndIndexed) {
+      return true;
+    }
     const isOld = new Date(lastCheckedAt) < new Date(Date.now() - CACHE_TIMEOUT);
-    return shouldIndexIt && isOld;
+    return isOld;
   };
+
+  const urlsToProcess = pages.filter((url) => {
+    const result = statusPerUrl[url];
+    return !result || shouldRecheck(result.status, result.lastCheckedAt);
+  });
+
+  console.log(`👉 Found ${urlsToProcess.length} URLs that need processing out of ${pages.length} total URLs`);
 
   await batch(
     async (url) => {
@@ -136,7 +145,7 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
 
       pagesPerStatus[result.status] = pagesPerStatus[result.status] ? [...pagesPerStatus[result.status], url] : [url];
     },
-    pages,
+    urlsToProcess,
     50,
     (batchIndex, batchCount) => {
       console.log(`📦 Batch ${batchIndex + 1} of ${batchCount} complete`);
