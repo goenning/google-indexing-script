@@ -11,4 +11,5 @@ export enum Status {
   RateLimited = "RateLimited",
   Forbidden = "Forbidden",
   Error = "Error",
+  NotFound = "Not found (404)",
 }
