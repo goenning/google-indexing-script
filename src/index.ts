@@ -16,6 +16,39 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 
 const CACHE_TIMEOUT = 1000 * 60 * 60 * 24 * 14; // 14 days
+const SHORT_TIMEOUT = 1000 * 60 * 60; // 1 hour
+
+const indexableStatuses = [
+  Status.SubmittedAndIndexed,
+  Status.CrawledCurrentlyNotIndexed,
+  Status.DiscoveredCurrentlyNotIndexed,
+  Status.Forbidden,
+  Status.Error,
+  Status.RateLimited,
+];
+
+const quickFixStatuses = [Status.NotFound, Status.PageWithRedirect];
+
+const shouldRecheck = (status: Status, lastCheckedAt: string) => {
+  const timeSinceLastCheck = Date.now() - new Date(lastCheckedAt).getTime();
+
+  if (indexableStatuses.includes(status)) {
+    if (status === Status.SubmittedAndIndexed) {
+      return timeSinceLastCheck > CACHE_TIMEOUT;
+    }
+    // For other indexable statuses, check more frequently
+    return timeSinceLastCheck > SHORT_TIMEOUT;
+  }
+
+  if (quickFixStatuses.includes(status)) {
+    // For statuses that might be quickly fixed, use a shorter timeout
+    return timeSinceLastCheck > SHORT_TIMEOUT;
+  }
+
+  // For any other status, use the standard cache timeout
+  return timeSinceLastCheck > CACHE_TIMEOUT;
+};
+
 export const QUOTA = {
   rpm: {
     retries: 3,
@@ -108,24 +141,19 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
     [Status.RateLimited]: [],
     [Status.Forbidden]: [],
     [Status.Error]: [],
+    [Status.NotFound]: [],
   };
 
   const indexableStatuses = [
-    Status.DiscoveredCurrentlyNotIndexed,
+    Status.SubmittedAndIndexed,
     Status.CrawledCurrentlyNotIndexed,
+    Status.DiscoveredCurrentlyNotIndexed,
     Status.URLIsUnknownToGoogle,
     Status.Forbidden,
     Status.Error,
     Status.RateLimited,
+    Status.NotFound,
   ];
-
-  const shouldRecheck = (status: Status, lastCheckedAt: string) => {
-    if (status !== Status.SubmittedAndIndexed) {
-      return true;
-    }
-    const isOld = new Date(lastCheckedAt) < new Date(Date.now() - CACHE_TIMEOUT);
-    return isOld;
-  };
 
   const urlsToProcess = pages.filter((url) => {
     const result = statusPerUrl[url];
