@@ -2,12 +2,10 @@
 
 Use this script to get your entire site indexed on Google in less than 48 hours. No tricks, no hacks, just a simple script and a Google API.
 
-You can read more about the motivation behind it and how it works in this blog post https://seogets.com/blog/google-indexing-script
-
 > [!IMPORTANT]
 >
-> 1. Indexing != Ranking. This will not help your page rank on Google, it'll just let Google know about the existence of your pages.
-> 2. This script uses [Google Indexing API](https://developers.google.com/search/apis/indexing-api/v3/quickstart). We do not recommend using this script on spam/low-quality content.
+> 1. This script uses [Google Indexing API](https://developers.google.com/search/apis/indexing-api/v3/quickstart) and it only works on pages with either `JobPosting` or `BroadcastEvent` structured data.
+> 2. Indexing != Ranking. This will not help your page rank on Google, it'll just let Google know about the existence of your pages.
 
 ## Requirements
 
@@ -177,10 +175,6 @@ index('seogets.com', {
 ```
 
 </details>
-
-## 🔀 Alternative
-
-If you prefer a hands-free, and less technical solution, you can use a SaaS platform like [TagParrot](https://tagparrot.com/?via=goenning).
 
 ## 📄 License
 
